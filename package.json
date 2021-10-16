@@ -1,0 +1,18 @@
+{
+    "name": "fuzzybear",
+    "author": "Itay Grudev",
+    "license": "MIT",
+    "exports": "./fuzzybear.js",
+    "jest": {
+        "collectCoverage": true,
+        "roots": [
+            "tests"
+        ]
+    },
+    "scripts": {
+        "test": "TZ=UTC jest --passWithNoTests"
+    },
+    "devDependencies": {
+        "jest": "^26.6.3"
+    }
+}
