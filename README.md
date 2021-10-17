@@ -10,7 +10,7 @@ string distances. The former favours matches from the beginning of a string, whi
 tokens and analyses those. Together these provide a reasonable performance for  most cases, but the library allows the
 user to customise the methods and parameters for searching.
 
-![Fuzzy bear](fuzzybear.jpg "Cute Fuzzy Bear")
+![Fuzzy bear](https://raw.githubusercontent.com/clustermarket/fuzzybear/main/fuzzybear.jpg "Cute Fuzzy Bear")
 
 Usage
 -----
