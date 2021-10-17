@@ -1,0 +1,22 @@
+name: Tests
+on: [ push ]
+jobs:
+  build:
+    strategy:
+      matrix:
+        node_version: [12, 13, 14, 15, 16]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Install pre-requisites
+        run: npm install
+
+      - name: Tests
+        run: npm test
