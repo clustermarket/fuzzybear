@@ -30,22 +30,3 @@ jobs:
       - run: npm publish
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-
-  publish-gpr:
-    needs: tests
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 12
-          registry-url: https://npm.pkg.github.com/
-          scope: '@clustermarket'
-      - run: npm ci
-      - run: npm config set '//npm.pkg.github.com/:_authToken' "${{ secrets.GITHUB_TOKEN }}"
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
