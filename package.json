@@ -16,5 +16,8 @@
     },
     "devDependencies": {
         "jest": "^27.2.5"
+    },
+    "publishConfig": {
+        "@clustermarket:registry": "https://npm.pkg.github.com"
     }
 }
