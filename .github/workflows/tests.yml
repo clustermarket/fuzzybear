@@ -11,12 +11,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install NodeJS
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node_version }}
 
-      - name: Install pre-requisites
-        run: npm install
-
-      - name: Tests
-        run: npm test
+      - run: npm ci
+      - run: npm test
+      - run: npm audit
