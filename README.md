@@ -1,5 +1,6 @@
 Fuzzybear
 =========
+[![Tests](https://github.com/clustermarket/fuzzybear/actions/workflows/tests.yml/badge.svg)](https://github.com/clustermarket/fuzzybear/actions/workflows/tests.yml)
 
 Fuzzybear is a JavaScript library for fuzzy string search with a special focus on short strings. It is designed to use 
 multiple string distance functions (including custom) but by default it uses a combination of Jaro-Winkler and Jaccard 
