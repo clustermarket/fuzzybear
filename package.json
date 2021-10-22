@@ -1,10 +1,11 @@
 {
     "name": "fuzzybear",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Fuzzybear is a library for fuzzy string search with a special focus on short strings.",
     "author": "Itay Grudev",
     "license": "MIT",
-    "exports": "./fuzzybear.js",
+    "main": "fuzzybear.js",
+    "exports": "fuzzybear.js",
     "jest": {
         "collectCoverage": true,
         "roots": [
