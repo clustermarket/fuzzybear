@@ -9,17 +9,25 @@
 let fuzzybear = require( '../fuzzybear.js' ).fuzzybear
 
 function sharedExamples( term, matches ){
-    it( 'returns the specified number of results', ()=>{
-        expect( matches.length ).toBeGreaterThan( 3 )
-        expect(
-            fuzzybear.search(
-                term,
-                matches,
-                {
-                    results: 3
-                }
-            ).length
-        ).toEqual( 3 )
+    describe( 'options.results', ()=>{
+        it( 'returns all results by default', ()=>{
+            expect(
+                fuzzybear.search( term, matches ).length
+            ).toEqual( matches.length )
+        })
+
+        it( 'returns the specified number of results with options.results specified', ()=>{
+            expect( matches.length ).toBeGreaterThan( 3 )
+            expect(
+                fuzzybear.search(
+                    term,
+                    matches,
+                    {
+                        results: 3
+                    }
+                ).length
+            ).toEqual( 3 )
+        })
     })
 
     it( 'returns a score of 1 for exact matches', ()=>{
