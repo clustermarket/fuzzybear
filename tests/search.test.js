@@ -30,6 +30,34 @@ function sharedExamples( term, matches ){
         })
     })
 
+    describe( 'options.minSearchScore', ()=>{
+        it( 'returns all results by default', ()=>{
+            expect(
+                fuzzybear.search( term, matches ).length
+            ).toEqual( matches.length )
+        })
+
+        it( 'returns only results with score above the specified', ()=>{
+            expect( matches.length ).toBeGreaterThan( 4 )
+            expect(
+                fuzzybear.search(
+                    term,
+                    matches,
+                    {
+                        methods: [
+                            {
+                                function: function( _a, _b, _params ){
+                                    return 1 / (Math.min( _b.length, 10 ))
+                                }
+                            }
+                        ],
+                        minSearchScore: 1 - 1 / 8 // (8 chars or longer)
+                    }
+                ).length
+            ).toEqual( 4 )
+        })
+    })
+
     it( 'returns a score of 1 for exact matches', ()=>{
         expect( fuzzybear.search( term, matches )[0].score ).toEqual( 1 )
     })
