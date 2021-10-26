@@ -69,6 +69,7 @@ fuzzybear.search( 'Identical', matches, {
 ```js
 /**
  * @param {Number}   options.results - Number of results to return. Defaults to 0 - all elements distanced
+ * @param {String}   options.labelField - Field to search against. Defaults to "label"
  * @param {Boolean}  options.caseSensitive - Whether to perform a case sensitive match. Defaults to false
  * @param {Number}   options.minScore - Minimum score of matches to be included in the results
  * @param {Object[]} options.methods - Which methods to use when scoring matches
