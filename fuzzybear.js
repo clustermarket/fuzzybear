@@ -20,9 +20,10 @@ const METHODS = {
  * Perform a fuzzy string search across a list of elements.
  * @param {String}   searchTerm
  * @param {Object[]|String[]} elements
- * @param {String}   elements[].value - Value to be searched against
+ * @param {String}   elements[].label - Value to be searched against
  * @param {Object}   options
  * @param {Number}   options.results - Number of results to return. Defaults to 0 - all elements distanced
+ * @param {String}   options.labelField - Field to search against. Defaults to "label"
  * @param {Boolean}  options.caseSensitive - Whether to perform a case sensitive match. Defaults to false
  * @param {Number}   options.minScore - Minimum score of matches to be included in the results
  * @param {Object[]} options.methods - Which methods to use when scoring matches
@@ -41,20 +42,20 @@ export function search( searchTerm, elements, options = {}){
         let value
         if( typeof element === 'string' ){
             value = element
-        } else if( typeof element === 'object' && typeof element.value === 'string' ){
-            value = element.value
+        } else if( typeof element === 'object' && typeof element[options.labelField] === 'string' ){
+            value = element[options.labelField]
         } else {
-            throw new Error( 'Element without value is not searchable' )
+            throw new Error( 'Element without label is not searchable' )
         }
 
         // Convert the string only values to object with value and distance
         if( typeof element === 'string' ) {
             element = {
-                value: element
+                [options.labelField]: element
             }
         }
 
-        let searchScore = score( searchTerm, value, options, true );
+        let searchScore = score( searchTerm, value, options, true )
         if( searchScore >= options.minScore )
             resultSet.push( Object.assign({}, element, { _score: searchScore }))
     })
@@ -74,6 +75,7 @@ export function search( searchTerm, elements, options = {}){
  * @param {String}   testString
  * @param {Object}   options
  * @param {Number}   options.results - Number of results to return. Defaults to 0 - all elements distanced
+ * @param {String}   options.labelField - Field to search against. Defaults to "label"
  * @param {Boolean}  options.caseSensitive - Whether to perform a case sensitive match. Defaults to false
  * @param {Number}   options.minScore - Minimum score of matches to be included in the results
  * @param {Object[]} options.methods - Which methods to use when scoring matches
@@ -106,6 +108,7 @@ function optionsDefaults( options ){
         results: 0,
         minScore: - Number.MAX_VALUE,
         caseSensitive: false,
+        labelField: 'label',
         methods: [
             {
                 name: 'jaro_winkler',

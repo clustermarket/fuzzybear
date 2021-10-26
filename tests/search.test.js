@@ -91,16 +91,16 @@ function sharedExamples( term, matches ){
     it( 'includes meaningful results', ()=>{
         let results = search( term, matches )
         expect(
-            results.map(( el ) => el.value)
+            results.map(( el ) => el.label)
         ).toContain( 'dentical' )
         expect(
-            results.filter(( el ) => el.value === 'dentical' )[0]._score
+            results.filter(( el ) => el.label === 'dentical' )[0]._score
         ).toBeGreaterThan( 0 )
         expect(
-            results.map(( el ) => el.value)
+            results.map(( el ) => el.label)
         ).toContain( 'Dental' )
         expect(
-            results.filter(( el ) => el.value === 'Dental' )[0]._score
+            results.filter(( el ) => el.label === 'Dental' )[0]._score
         ).toBeGreaterThan( 0 )
     })
 
@@ -130,12 +130,12 @@ describe( 'search', ()=>{
     describe( 'with object elements', ()=>{
         let term = 'Identical'
         let matches = [
-            { value:'Identical', id: 's0' },
-            { value:'Identifier', id: 's1' },
-            { value:'dentical', id: 's2' },
-            { value:'Dental', id: 's3' },
-            { value:'dentist', id: 's4' },
-            { value:'Different', id: 's5' },
+            { label: 'Identical', id: 's0' },
+            { label: 'Identifier', id: 's1' },
+            { label: 'dentical', id: 's2' },
+            { label: 'Dental', id: 's3' },
+            { label: 'dentist', id: 's4' },
+            { label: 'Different', id: 's5' },
         ]
 
         sharedExamples( term, matches )
@@ -152,11 +152,11 @@ describe( 'search', ()=>{
             ()=>{
                 search( 'term', [ {}, {}, {} ])
             }
-        ).toThrowError( 'Element without value is not searchable' )
+        ).toThrowError( 'Element without label is not searchable' )
         expect(
             ()=>{
                 search( 'term', [ 1, 2, 3 ])
             }
-        ).toThrowError( 'Element without value is not searchable' )
+        ).toThrowError( 'Element without label is not searchable' )
     })
 })
