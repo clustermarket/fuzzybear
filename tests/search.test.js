@@ -6,20 +6,21 @@
  * @copyright (c) 2021 Clustermarket Ltd.
  * @license MIT
  */
-let fuzzybear = require( '../fuzzybear.js' ).fuzzybear
+
+import { search } from '../fuzzybear'
 
 function sharedExamples( term, matches ){
     describe( 'options.results', ()=>{
         it( 'returns all results by default', ()=>{
             expect(
-                fuzzybear.search( term, matches ).length
+                search( term, matches ).length
             ).toEqual( matches.length )
         })
 
         it( 'returns the specified number of results with options.results specified', ()=>{
             expect( matches.length ).toBeGreaterThan( 3 )
             expect(
-                fuzzybear.search(
+                search(
                     term,
                     matches,
                     {
@@ -33,14 +34,14 @@ function sharedExamples( term, matches ){
     describe( 'options.minScore', ()=>{
         it( 'returns all results by default', ()=>{
             expect(
-                fuzzybear.search( term, matches ).length
+                search( term, matches ).length
             ).toEqual( matches.length )
         })
 
         it( 'returns only results with score above the specified', ()=>{
             expect( matches.length ).toBeGreaterThan( 4 )
             expect(
-                fuzzybear.search(
+                search(
                     term,
                     matches,
                     {
@@ -59,15 +60,15 @@ function sharedExamples( term, matches ){
     })
 
     it( 'returns a score of 1 for exact matches', ()=>{
-        expect( fuzzybear.search( term, matches )[0]._score ).toEqual( 1 )
+        expect( search( term, matches )[0]._score ).toEqual( 1 )
     })
 
     it( 'returns a score of 0 for completely different strings', ()=>{
-        expect( fuzzybear.search( '@!-=()%$', matches )[0]._score ).toEqual( 0 )
+        expect( search( '@!-=()%$', matches )[0]._score ).toEqual( 0 )
     })
 
     it( 'returns results sorted in ascending distance', ()=>{
-        let results = fuzzybear.search( term, matches )
+        let results = search( term, matches )
         let prevResult = results[0]
         for( let i = 1; i < results.length; ++i ){
             expect( results[i]._score ).toBeLessThanOrEqual( prevResult._score )
@@ -76,19 +77,19 @@ function sharedExamples( term, matches ){
     })
 
     it( 'is case insensitive by default', ()=>{
-        let resultsLower = fuzzybear.search( term.toLowerCase(), matches )
-        let resultsUpper = fuzzybear.search( term.toUpperCase(), matches )
+        let resultsLower = search( term.toLowerCase(), matches )
+        let resultsUpper = search( term.toUpperCase(), matches )
         expect( resultsLower ).toEqual( resultsUpper )
     })
 
     it( 'is case sensitive with caseSensitive set to true', ()=>{
-        let resultsLower = fuzzybear.search( term.toLowerCase(), matches, { caseSensitive: true })
-        let resultsUpper = fuzzybear.search( term.toUpperCase(), matches, { caseSensitive: true })
+        let resultsLower = search( term.toLowerCase(), matches, { caseSensitive: true })
+        let resultsUpper = search( term.toUpperCase(), matches, { caseSensitive: true })
         expect( resultsLower ).not.toEqual( resultsUpper )
     })
 
     it( 'includes meaningful results', ()=>{
-        let results = fuzzybear.search( term, matches )
+        let results = search( term, matches )
         expect(
             results.map(( el ) => el.value)
         ).toContain( 'dentical' )
@@ -106,19 +107,19 @@ function sharedExamples( term, matches ){
     it( 'raises an exception when no methods are specified', ()=>{
         expect(
             ()=>{
-                fuzzybear.search( term, matches, { methods: [] } )
+                search( term, matches, { methods: [] } )
             }
         ).toThrowError( 'No search methods specified.' )
     })
 
     it( 'returns 0 distances when the search term is empty', ()=>{
         expect(
-            fuzzybear.search( '', matches ).map( e => e._score )
+            search( '', matches ).map( e => e._score )
         ).toEqual( matches.map( _ => 0 ) )
     })
 }
 
-describe( 'fuzzybear.search', ()=>{
+describe( 'search', ()=>{
     describe( 'with string elements', ()=>{
         let term = 'Identical'
         let matches = [ 'Identical', 'Identifier', 'dentical', 'Dental', 'dentist', 'different' ]
@@ -142,19 +143,19 @@ describe( 'fuzzybear.search', ()=>{
 
     it( 'returns 0 distances when search elements are empty', ()=>{
         expect(
-            fuzzybear.search( 'asd', [ '', '' ] ).map( e => e._score )
+            search( 'asd', [ '', '' ] ).map( e => e._score )
         ).toEqual( [ 0, 0 ])
     })
 
     it( 'raises an exception when no string values can be found', ()=>{
         expect(
             ()=>{
-                fuzzybear.search( 'term', [ {}, {}, {} ])
+                search( 'term', [ {}, {}, {} ])
             }
         ).toThrowError( 'Element without value is not searchable' )
         expect(
             ()=>{
-                fuzzybear.search( 'term', [ 1, 2, 3 ])
+                search( 'term', [ 1, 2, 3 ])
             }
         ).toThrowError( 'Element without value is not searchable' )
     })
