@@ -30,19 +30,47 @@ function sharedExamples( term, matches ){
         })
     })
 
+    describe( 'options.minScore', ()=>{
+        it( 'returns all results by default', ()=>{
+            expect(
+                fuzzybear.search( term, matches ).length
+            ).toEqual( matches.length )
+        })
+
+        it( 'returns only results with score above the specified', ()=>{
+            expect( matches.length ).toBeGreaterThan( 4 )
+            expect(
+                fuzzybear.search(
+                    term,
+                    matches,
+                    {
+                        methods: [
+                            {
+                                function: function( _a, _b, _params ){
+                                    return 1 / (Math.min( _b.length, 10 ))
+                                }
+                            }
+                        ],
+                        minScore: 1 - 1 / 8 // (8 chars or longer)
+                    }
+                ).length
+            ).toEqual( 4 )
+        })
+    })
+
     it( 'returns a score of 1 for exact matches', ()=>{
-        expect( fuzzybear.search( term, matches )[0].score ).toEqual( 1 )
+        expect( fuzzybear.search( term, matches )[0]._score ).toEqual( 1 )
     })
 
     it( 'returns a score of 0 for completely different strings', ()=>{
-        expect( fuzzybear.search( '@!-=()%$', matches )[0].score ).toEqual( 0 )
+        expect( fuzzybear.search( '@!-=()%$', matches )[0]._score ).toEqual( 0 )
     })
 
     it( 'returns results sorted in ascending distance', ()=>{
         let results = fuzzybear.search( term, matches )
         let prevResult = results[0]
         for( let i = 1; i < results.length; ++i ){
-            expect( results[i].score ).toBeLessThanOrEqual( prevResult.score )
+            expect( results[i]._score ).toBeLessThanOrEqual( prevResult._score )
             prevResult = results[i]
         }
     })
@@ -65,13 +93,13 @@ function sharedExamples( term, matches ){
             results.map(( el ) => el.value)
         ).toContain( 'dentical' )
         expect(
-            results.filter(( el ) => el.value === 'dentical' )[0].score
+            results.filter(( el ) => el.value === 'dentical' )[0]._score
         ).toBeGreaterThan( 0 )
         expect(
             results.map(( el ) => el.value)
         ).toContain( 'Dental' )
         expect(
-            results.filter(( el ) => el.value === 'Dental' )[0].score
+            results.filter(( el ) => el.value === 'Dental' )[0]._score
         ).toBeGreaterThan( 0 )
     })
 
@@ -85,7 +113,7 @@ function sharedExamples( term, matches ){
 
     it( 'returns 0 distances when the search term is empty', ()=>{
         expect(
-            fuzzybear.search( '', matches ).map( e => e.score )
+            fuzzybear.search( '', matches ).map( e => e._score )
         ).toEqual( matches.map( _ => 0 ) )
     })
 }
@@ -114,7 +142,7 @@ describe( 'fuzzybear.search', ()=>{
 
     it( 'returns 0 distances when search elements are empty', ()=>{
         expect(
-            fuzzybear.search( 'asd', [ '', '' ] ).map( e => e.score )
+            fuzzybear.search( 'asd', [ '', '' ] ).map( e => e._score )
         ).toEqual( [ 0, 0 ])
     })
 

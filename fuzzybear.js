@@ -10,16 +10,17 @@
 
 /**
  * Perform a fuzzy string search across a list of elements.
- * @param {String} searchTerm
+ * @param {String}   searchTerm
  * @param {Object[]|String[]} elements
- * @param {String} elements[].value - Value to be searched against
- * @param {Object} options
- * @param {Number} options.results - Number of results to return. Defaults to 0 - all elements distanced
- * @param {Boolean} options.caseSensitive - Whether to perform a case sensitive match. Defaults to false
- * @param {Object[]}  options.methods - Which methods to use when scoring matches
- * @param {String}  options.methods[].name - Search algorithm name
- * @param {Number}  options.methods[].weight - Search algorithm weight in scoring
- * @param {Object}  options.methods[].params - Search algorithm parameters
+ * @param {String}   elements[].value - Value to be searched against
+ * @param {Object}   options
+ * @param {Number}   options.results - Number of results to return. Defaults to 0 - all elements distanced
+ * @param {Boolean}  options.caseSensitive - Whether to perform a case sensitive match. Defaults to false
+ * @param {Number}   options.minScore - Minimum score of matches to be included in the results
+ * @param {Object[]} options.methods - Which methods to use when scoring matches
+ * @param {String}   options.methods[].name - Search algorithm name
+ * @param {Number}   options.methods[].weight - Search algorithm weight in scoring
+ * @param {Object}   options.methods[].params - Search algorithm parameters
  * @raises {Error} if the search method is not supported or if element are invalid
  */
 function search( searchTerm, elements, options = {}){
@@ -45,15 +46,13 @@ function search( searchTerm, elements, options = {}){
             }
         }
 
-        resultSet.push(
-            Object.assign({}, element, {
-                score: score( searchTerm, value, options, true ),
-            })
-        )
+        let searchScore = score( searchTerm, value, options, true );
+        if( searchScore >= options.minScore )
+            resultSet.push( Object.assign({}, element, { _score: searchScore }))
     })
 
     // Sort ascending based on index
-    resultSet.sort(( left, right ) => { return right.score - left.score })
+    resultSet.sort(( left, right ) => { return right._score - left._score })
 
     if( options.results > 0 )
         resultSet = resultSet.slice( 0, options.results )
@@ -63,14 +62,16 @@ function search( searchTerm, elements, options = {}){
 
 /**
  * Perform a fuzzy string distance of two strings.
- * @param {String} searchTerm
- * @param {String} testString
- * @param {Object} options
- * @param {Number} options.results - Number of results to return. Defaults to 0 - all elements distanced
- * @param {Boolean} options.caseSensitive - Whether to perform a case sensitive match. Defaults to false
- * @param {Object[]}  options.methods - Which methods to use when scoring matches
- * @param {String}  options.methods[].name - Search algorithm name
- * @param {Object}  options.methods[].params - Search algorithm parameters
+ * @param {String}   searchTerm
+ * @param {String}   testString
+ * @param {Object}   options
+ * @param {Number}   options.results - Number of results to return. Defaults to 0 - all elements distanced
+ * @param {Boolean}  options.caseSensitive - Whether to perform a case sensitive match. Defaults to false
+ * @param {Number}   options.minScore - Minimum score of matches to be included in the results
+ * @param {Object[]} options.methods - Which methods to use when scoring matches
+ * @param {String}   options.methods[].name - Search algorithm name
+ * @param {Number}   options.methods[].weight - Search algorithm weight in scoring
+ * @param {Object}   options.methods[].params - Search algorithm parameters
  * @raises {Error} if the search method is not supported or if element are invalid
  */
 function score( searchTerm, testString, options = {}, _skipOptionsPrep = false ){
@@ -95,6 +96,7 @@ function score( searchTerm, testString, options = {}, _skipOptionsPrep = false )
 function optionsDefaults( options ){
     options =  Object.assign({}, {
         results: 0,
+        minScore: - Number.MAX_VALUE,
         caseSensitive: false,
         methods: [
             {

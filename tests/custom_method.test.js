@@ -21,7 +21,7 @@ describe( 'custom search methods', ()=>{
                         }
                     }
                 ]
-            }).map( e => e.score )
+            }).map( e => e._score )
         ).toEqual( [ 0.64, 0.64, 0.64, 0.64 ]) // note that score is the inverse of distance s = 1 - d
     })
 })

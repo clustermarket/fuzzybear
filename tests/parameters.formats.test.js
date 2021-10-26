@@ -12,7 +12,7 @@ it( 'method name shorthand', ()=>{
     expect(
         fuzzybear.search( 'term', [ 'terminus', 'exterminator' ], {
             methods: [ 'jaro-winkler', 'jaccard' ]
-        }).map( e => Math.round( e.score * 10) / 10 )
+        }).map( e => Math.round( e._score * 10) / 10 )
     ).toEqual( [ 0.7, 0.5, ])
 })
 
@@ -20,7 +20,7 @@ it( 'custom method shorthand', ()=>{
     expect(
         fuzzybear.search( 'term', [ 'terminus', 'exterminator' ], {
             methods: [ ()=> 0.8 ]
-        }).map( e => Math.round( e.score * 10) / 10 )
+        }).map( e => Math.round( e._score * 10) / 10 )
     ).toEqual( [ 0.2, 0.2 ])
 })
 
@@ -29,7 +29,7 @@ it( 'invalid method shorthand', ()=>{
         ()=>{
             fuzzybear.search( 'term', [ 'terminus', 'exterminator' ], {
                 methods: [ 1, 3, 2 ]
-            }).map( e => Math.round( e.score * 10) / 10 )
+            }).map( e => Math.round( e._score * 10) / 10 )
         }
     ).toThrowError( 'Invalid method definition' )
 })
