@@ -23,7 +23,7 @@
  *  upwards for having common prefixes.
  * @returns {Number} Similarity score, normalized between 0 and 1, where 0 is an exact match
  */
-exports.distance = (a, b, params )=>{
+export default function distance(a, b, params ){
     params = Object.assign({}, {
         p: 0.1
     }, params )

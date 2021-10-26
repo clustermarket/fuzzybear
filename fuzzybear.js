@@ -8,6 +8,14 @@
  * @export fuzzybear
  */
 
+import jaccard from './methods/jaccard'
+import jaro_winkler from './methods/jaro_winkler'
+
+const METHODS = {
+  jaccard:      jaccard,
+  jaro_winkler: jaro_winkler,
+}
+
 /**
  * Perform a fuzzy string search across a list of elements.
  * @param {String}   searchTerm
@@ -23,7 +31,7 @@
  * @param {Object}   options.methods[].params - Search algorithm parameters
  * @raises {Error} if the search method is not supported or if element are invalid
  */
-function search( searchTerm, elements, options = {}){
+export function search( searchTerm, elements, options = {}){
     options = optionsDefaults( options )
     validateOptions( options )
     loadMethods( options )
@@ -74,7 +82,7 @@ function search( searchTerm, elements, options = {}){
  * @param {Object}   options.methods[].params - Search algorithm parameters
  * @raises {Error} if the search method is not supported or if element are invalid
  */
-function score( searchTerm, testString, options = {}, _skipOptionsPrep = false ){
+export function score( searchTerm, testString, options = {}, _skipOptionsPrep = false ){
     if( ! _skipOptionsPrep ){
         options = optionsDefaults( options )
         validateOptions( options )
@@ -100,7 +108,7 @@ function optionsDefaults( options ){
         caseSensitive: false,
         methods: [
             {
-                name: 'jaro-winkler',
+                name: 'jaro_winkler',
                 params: { p: 0.1 },
                 weight: 1.5
             },
@@ -145,12 +153,7 @@ function loadMethods( options ){
     // Load specified methods
     options.methods.forEach( (method, index) => {
         if( method.function ) return // Skip if a function is already defined
-
-        method.function = require( `./methods/${method.name}.js` ).distance
+        if( method.name in METHODS )
+          method.function = METHODS[method.name]
     })
-}
-
-exports.fuzzybear = {
-    search: search,
-    score: score,
 }

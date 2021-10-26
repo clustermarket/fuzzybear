@@ -6,6 +6,7 @@
     "license": "MIT",
     "main": "fuzzybear.js",
     "exports": "fuzzybear.js",
+    "type": "module",
     "jest": {
         "collectCoverage": true,
         "roots": [
@@ -13,7 +14,7 @@
         ]
     },
     "scripts": {
-        "test": "jest --passWithNoTests"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
     },
     "devDependencies": {
         "jest": "^27.2.5"

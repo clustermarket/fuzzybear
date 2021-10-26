@@ -7,12 +7,12 @@
  * @license MIT
  */
 
-let fuzzybear = require( '../fuzzybear.js' ).fuzzybear
+import { search } from '../fuzzybear'
 
 describe( 'custom search methods', ()=>{
     it( 'returns the correct distances based on the custom distance function', ()=>{
         expect(
-            fuzzybear.search( 'asd', [ 'a', 'b', 'c', 'd' ], {
+            search( 'asd', [ 'a', 'b', 'c', 'd' ], {
                 methods: [
                     {
                         name: 'match-all',

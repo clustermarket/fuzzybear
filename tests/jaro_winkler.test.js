@@ -6,7 +6,8 @@
  * @copyright (c) 2021 Clustermarket Ltd.
  * @license MIT
  */
-let distance = require( '../methods/jaro-winkler.js' ).distance
+
+import distance from '../methods/jaro_winkler.js'
 
 describe( 'Jaro-Winkler string distance', ()=>{
     it( 'returns a score of 0 for identical strings', ()=>{

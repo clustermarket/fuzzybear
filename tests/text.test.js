@@ -6,26 +6,24 @@
  * @copyright (c) 2021 Clustermarket Ltd.
  * @license MIT
  */
-let fuzzybear = require( '../fuzzybear.js' ).fuzzybear
 
-// ja qu el in e
-// j aq ue li ne
+import { search } from '../fuzzybear'
 
 describe( 'long text examples', ()=>{
     const BIO_EXCERPT = {
         id: 'bio',
         value: `
-            The films he has directed have ranged across a wide variety of genres, 
-            for both adults and families. Zemeckis's films are characterized by 
-            an interest in state-of-the-art special effects, including the 
-            early use of insertion of computer graphics into live-action footage 
+            The films he has directed have ranged across a wide variety of genres,
+            for both adults and families. Zemeckis's films are characterized by
+            an interest in state-of-the-art special effects, including the
+            early use of insertion of computer graphics into live-action footage
         `,
     }
 
     const DUAL_OCCUR_EXCERPT = {
         id: 'dual',
         value: `
-            Robert Lee Zemeckis born May 14, 1951 is an American film director, film  
+            Robert Lee Zemeckis born May 14, 1951 is an American film director, film
             producer, and screenwriter who is frequently credited as an innovator
             in visual effects. Zemeckis first attended Northern Illinois University
             in DeKalb, Illinois, and gained early experience in film as a film cutter
@@ -37,9 +35,9 @@ describe( 'long text examples', ()=>{
         id: 'multi',
         value: `
             At USC Zemeckis met a fellow student, writer Bob Gale. Zemeckis came
-            to the attention of Steven Spielberg. Spielberg became Zemeckis's 
+            to the attention of Steven Spielberg. Spielberg became Zemeckis's
             mentor and executive produced his first two films, both of which Gale
-            and Zemeckis co-wrote. 
+            and Zemeckis co-wrote.
         `,
     }
 
@@ -59,7 +57,7 @@ describe( 'long text examples', ()=>{
              In my younger and more vulnerable years my father gave me some advice
              that I’ve been turning over in my mind ever since. “Whenever you feel
              like criticizing anyone,” he told me, “just remember that all the
-             people in this world haven’t had the advantages that you’ve had.” 
+             people in this world haven’t had the advantages that you’ve had.”
         `
     }
 
@@ -72,12 +70,12 @@ describe( 'long text examples', ()=>{
     ]
 
     it( 'are scored correctly with a single word search term', ()=>{
-        let results = fuzzybear.search( 'Zenekis', matches )
+        let results = search( 'Zenekis', matches )
         expect( results.map( e => e.id )).toEqual( [ 'multi', 'dual', 'bio', 'gatsby', 'alice' ] )
     })
 
     it( 'are scored correctly with a single word search term', ()=>{
-        let results = fuzzybear.search( 'father advice Zenekis', matches )
+        let results = search( 'father advice Zenekis', matches )
         expect( results.map( e => e.id )).toEqual( [ 'gatsby', 'multi', 'bio', 'dual', 'alice' ] )
     })
 })
