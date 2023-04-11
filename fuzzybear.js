@@ -80,6 +80,7 @@ export function search( searchTerm, elements, options = {}){
  * @param {Number}   options.minScore - Minimum score of matches to be included in the results
  * @param {Object[]} options.methods - Which methods to use when scoring matches
  * @param {String}   options.methods[].name - Search algorithm name
+ * @param {Object}   options.methods[].function - A custom search algorithm function. The function takes
  * @param {Number}   options.methods[].weight - Search algorithm weight in scoring
  * @param {Object}   options.methods[].params - Search algorithm parameters
  * @raises {Error} if the search method is not supported or if element are invalid

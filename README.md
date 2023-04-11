@@ -49,6 +49,7 @@ fuzzybear.score( 'prism', 'unpristine' ) // => 0.56
 
 ### Advanced usage
 
+#### Search method parameters
 You can pass custom methods and/or use one of the implemented methods in fuzzybear. You can also specify certain method
 parameters to override the method's behaviour. For example, you can use a minimum of 3 letter substring matches in the
 Jaccard search method to ignore matches with less than 3 letters.
@@ -64,6 +65,31 @@ fuzzybear.search( 'Identical', matches, {
 })
 ```
 
+#### Custom search function
+You can also pass a custom scoring function to the search method. The function takes 3 parameters: the search term, the 
+target string and the method parameters. The function should return a number between 0 and 1, where 0 is a perfect match
+(meaning the string distance is 0).
+
+```js
+fuzzybear.search( 'asd', [ 'a', 'b', 'c', 'd' ], {
+    methods: [
+        {
+            name: 'match-all',
+            function: function( _a, _b, _params ){
+                return 0.36
+            }
+        }
+    ]
+})
+```
+
+## API
+
+```js
+fuzzybear.search( term, matches, options ) // Perform a fuzzy string search across a list of elements.
+fuzzybear.score( term, match, options ) // Perform a fuzzy string distance of two strings.
+```
+
 ### Configuration options
 
 ```js
@@ -74,14 +100,15 @@ fuzzybear.search( 'Identical', matches, {
  * @param {Number}   options.minScore - Minimum score of matches to be included in the results
  * @param {Object[]} options.methods - Which methods to use when scoring matches
  * @param {String}   options.methods[].name - Search algorithm name
+ * @param {Object}   options.methods[].function - A custom search algorithm function. The function takes
  * @param {Number}   options.methods[].weight - Search algorithm weight in scoring
  * @param {Object}   options.methods[].params - Search algorithm parameters
  */
 ```
 
-### PR's accepted for
+## PR's accepted for:
 
-* Search methods that support longer text and favour a tokenised approach
+* Search methods that support longer text and using a tokenised approach (and maybe even re-using the standard string distance methods).
 * Support for string pre-processors
  - UTF-8 to ASCII conversion for symbols like: `äáčďéíöóúüñ¿¡Æ`
  - Metaphone conversion
@@ -89,4 +116,5 @@ fuzzybear.search( 'Identical', matches, {
 License
 -------
 
-All code and documentation are licensed under the MIT license.
+All code and documentation are licensed under the MIT license, although permission is not granted for using this code
+as a sample data for training machine learning networks.
