@@ -24,12 +24,12 @@ each element contains a key `value`.
 let matches = [ 'Identical', 'Identifier', 'dentical', 'Dental', 'dentist', 'different' ]
 // OR
 let matches = [
-    { value:'Identical', id: 's0' },
-    { value:'Identifier', id: 's1' },
-    { value:'dentical', id: 's2' },
-    { value:'Dental', id: 's3' },
-    { value:'dentist', id: 's4' },
-    { value:'Different', id: 's5' },
+    { label: 'Identical', id: 's0' },
+    { label: 'Identifier', id: 's1' },
+    { label: 'dentical', id: 's2' },
+    { label: 'Dental', id: 's3' },
+    { label: 'dentist', id: 's4' },
+    { label: 'Different', id: 's5' },
 ]
 fuzzybear.search( 'Identical', matches )
 ```
