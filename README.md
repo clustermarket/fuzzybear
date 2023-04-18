@@ -106,6 +106,66 @@ fuzzybear.score( term, match, options ) // Perform a fuzzy string distance of tw
  */
 ```
 
+## Performance evaluation
+
+The performance analysis is based on the examples of [Raffael Vogler](https://www.joyofdata.de/blog/comparison-of-string-distance-algorithms/) of short string search methods.
+
+With it's default settings of: `jaro_winkler` and `jaccard` with weights of `1.5` and `1` respectively fuzzybear produces the folowing scores.
+
+The results match our intuitive expectations and order in terms of typos. Overall the combination of the two algorithms produces stronger and more acurrate results where only one of the algorithms in isolation fails.
+
+```js
+let matches = [
+    "Cosmo Kramer",
+    "Kosmo Kramer",
+    "Comso Kramer",
+    "Csmo Kramer",
+    "Cosmo X. Kramer",
+    "Kramer, Cosmo",
+    "Jerry Seinfeld",
+    " CKaemmoorrs",
+    "Cosmer Kramo",
+    "Kosmoo Karme",
+    "George Costanza",
+    "Elaine Benes",
+    "Dr. Van Nostren",
+    "remarK omsoC",
+    "Mr. Kramer",
+    "Sir Cosmo Kramer",
+    "C.o.s.m.o. .K.r.a.m.e.r",
+    "CsoKae",
+    "Coso Kraer"
+]
+fuzzybear.search( 'Cosmo Kramer', matches ).map( ( match ) => {
+    match._score = 1 - match._score // converting from score back to string distance
+    return match
+})
+```
+
+```js
+[
+  { label: 'Cosmo Kramer', _score: 0 },
+  { label: 'Kosmo Kramer', _score: 0.09999999999999998 },
+  { label: 'Cosmo X. Kramer', _score: 0.10971428571428576 },
+  { label: 'Csmo Kramer', _score: 0.13954545454545442 },
+  { label: 'Cosmer Kramo', _score: 0.1426666666666666 },
+  { label: 'Comso Kramer', _score: 0.1847619047619048 },
+  { label: 'Coso Kraer', _score: 0.20794871794871794 },
+  { label: 'Sir Cosmo Kramer', _score: 0.2483333333333334 },
+  { label: 'Mr. Kramer', _score: 0.3352380952380952 },
+  { label: 'Kosmoo Karme', _score: 0.33666666666666667 },
+  { label: 'Kramer, Cosmo', _score: 0.4226007326007325 },
+  { label: 'C.o.s.m.o. .K.r.a.m.e.r', _score: 0.5089130434782609 },
+  { label: 'CsoKae', _score: 0.5199999999999999 },
+  { label: ' CKaemmoorrs', _score: 0.5698412698412698 },
+  { label: 'remarK omsoC', _score: 0.6238095238095238 },
+  { label: 'George Costanza', _score: 0.6685507246376812 },
+  { label: 'Dr. Van Nostren', _score: 0.6866666666666666 },
+  { label: 'Jerry Seinfeld', _score: 0.7087991718426502 },
+  { label: 'Elaine Benes', _score: 0.8333333333333334 }
+]
+```
+
 ## PR's accepted for:
 
 * Search methods that support longer text and using a tokenised approach (and maybe even re-using the standard string distance methods).
