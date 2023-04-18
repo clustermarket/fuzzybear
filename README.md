@@ -18,7 +18,7 @@ Usage
 ### Subset Search
 
 `fuzzybear.search` is the primary method used for searching. It accepts either a string array or an object. array where
-each element contains a key `value`.
+each element contains a key `label`.
 
 ```js
 let matches = [ 'Identical', 'Identifier', 'dentical', 'Dental', 'dentist', 'different' ]
